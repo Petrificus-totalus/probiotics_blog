@@ -4,15 +4,42 @@ import { Menu } from "antd";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import styles from "./menuList.module.css";
-const { SubMenu } = Menu;
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { MenuFoldOutlined, UserOutlined } from "@ant-design/icons";
 
 export default function Menulist() {
   const path = usePathname();
+  const items = [
+    {
+      key: "bank_account",
+      label: "Account",
+      icon: <UserOutlined />,
+      children: [
+        {
+          key: "/spend",
+          label: <Link href="/spend">spend</Link>,
+        },
+        {
+          key: "/chart",
+          label: <Link href="/chart">chart</Link>,
+        },
+      ],
+    },
+    {
+      key: "learn",
+      label: "Learn",
+      icon: <MenuFoldOutlined />,
+      children: [
+        {
+          key: "/algorithm",
+          label: <Link href="/algorithm">algorithm</Link>,
+        },
+        {
+          key: "/h5c3",
+          label: <Link href="/h5c3">h5c3</Link>,
+        },
+      ],
+    },
+  ];
   return (
     <div className={styles.container}>
       <Menu
@@ -21,24 +48,8 @@ export default function Menulist() {
         defaultSelectedKeys={["/spend"]}
         selectedKeys={[path === "/" ? "/spend" : path]}
         defaultOpenKeys={["bank_account"]}
-      >
-        <SubMenu key="bank_account" icon={<UserOutlined />} title="Account">
-          <Menu.Item key="/spend">
-            <Link href="/spend">spend</Link>
-          </Menu.Item>
-          <Menu.Item key="/chart">
-            <Link href="/chart">chart</Link>
-          </Menu.Item>
-        </SubMenu>
-        <SubMenu key="learn" icon={<MenuFoldOutlined />} title="Learn">
-          <Menu.Item key="/algorithm">
-            <Link href="/algorithm">algorithm</Link>
-          </Menu.Item>
-          <Menu.Item key="/h5c3">
-            <Link href="/h5c3">h5c3</Link>
-          </Menu.Item>
-        </SubMenu>
-      </Menu>
+        items={items}
+      />
     </div>
   );
 }
