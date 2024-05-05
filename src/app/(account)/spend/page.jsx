@@ -53,15 +53,26 @@ const columns = [
 ];
 export default function Spend() {
   const [transactions, setTransactions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const getTransactions = async () => {
-    const response = await fetch("/api/spend");
-    const { data } = await response.json();
+    const response = await fetch(`/api/spend?page=${currentPage}`);
+    const { data, totalPages } = await response.json();
     setTransactions(data);
+    setTotalPages(totalPages);
   };
   useEffect(() => {
-    getTransactions();
-  }, []);
+    getTransactions(currentPage);
+  }, [currentPage]);
+
+  const handlePrev = () => {
+    setCurrentPage((current) => Math.max(1, current - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentPage((current) => Math.min(totalPages, current + 1));
+  };
   return (
     <div>
       <UploadSpend />
@@ -78,9 +89,16 @@ export default function Spend() {
               columns={columns}
               dataSource={transactions}
               showHeader={false}
+              pagination={false}
             />
           </Card>
         ))}
+        <Button onClick={handlePrev} disabled={currentPage === 1}>
+          Previous
+        </Button>
+        <Button onClick={handleNext} disabled={currentPage === totalPages}>
+          Next
+        </Button>
       </div>
     </div>
   );

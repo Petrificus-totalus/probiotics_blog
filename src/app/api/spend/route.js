@@ -3,11 +3,17 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export const GET = async () => {
+export const GET = async (req) => {
   try {
     const db = await getMySQLConnection();
-    const page = 1; // 页数
-    const count = 4; // 每页记录数
+    const url = new URL(req.url);
+    const searchParams = new URLSearchParams(url.searchParams);
+    const page = parseInt(searchParams.get("page") || "1");
+    const [total] = await db.execute(
+      "SELECT COUNT(DISTINCT date) as total FROM transactions"
+    );
+    const count = 3; // 每页记录数
+    const totalPages = Math.ceil(total[0].total / count);
 
     const offset = (page - 1) * count;
     const [datesResult] = await db.query(
@@ -20,7 +26,12 @@ export const GET = async () => {
     const dates = datesResult.map((d) => d.date);
 
     if (dates.length === 0) {
-      return []; // No transactions for these dates
+      return new NextResponse(JSON.stringify({ data: [], totalPages }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
 
     // Second query to get transactions based on the dates fetched
@@ -56,12 +67,15 @@ export const GET = async () => {
       return acc;
     }, {});
 
-    return new NextResponse(JSON.stringify({ data: Object.values(grouped) }), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return new NextResponse(
+      JSON.stringify({ data: Object.values(grouped), totalPages }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   } catch (error) {
     console.error("Database connection or query error:", error);
     db?.end();
