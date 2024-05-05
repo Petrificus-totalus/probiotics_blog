@@ -45,9 +45,20 @@ export const GET = async (req) => {
       [dates]
     );
     // console.log(transactions);
+    // Fetch tags for these transactions
+    const [tags] = await db.query(
+      `
+          SELECT tt.transactionID, tg.tag
+          FROM transaction_tag tt
+          JOIN tags tg ON tt.tagID = tg.tagID
+          WHERE tt.transactionID IN (?)
+        `,
+      [transactions.map((t) => t.transactionID)]
+    );
     db.end();
 
     // Process results to group by date
+    // Combine transactions with their tags
     const grouped = transactions.reduce((acc, item) => {
       if (!acc[item.date]) {
         acc[item.date] = {
@@ -56,13 +67,16 @@ export const GET = async (req) => {
           transactions: [],
         };
       }
+
+      const transactionTags = tags
+        .filter((tag) => tag.transactionID === item.transactionID)
+        .map((tag) => tag.tag);
+
       acc[item.date].transactions.push({
-        transactionID: item.transactionID,
-        description: item.description,
-        price: item.price,
-        location: item.location,
-        title: item.title,
+        ...item,
+        tags: transactionTags,
       });
+
       acc[item.date].total += parseFloat(item.price);
       return acc;
     }, {});

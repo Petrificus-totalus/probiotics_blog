@@ -23,20 +23,20 @@ const columns = [
     key: "price",
     render: (text) => <span>{parseFloat(text).toFixed(2)}</span>,
   },
-  // {
-  //   title: "Tags",
-  //   key: "tags",
-  //   dataIndex: "tags",
-  //   render: (tags) => (
-  //     <>
-  //       {tags.map((tag) => (
-  //         <Tag color="blue" key={tag}>
-  //           {tag}
-  //         </Tag>
-  //       ))}
-  //     </>
-  //   ),
-  // },
+  {
+    title: "Tags",
+    key: "tags",
+    dataIndex: "tags",
+    render: (tags) => (
+      <>
+        {tags.map((tag) => (
+          <Tag color="blue" key={tag}>
+            {tag}
+          </Tag>
+        ))}
+      </>
+    ),
+  },
   {
     title: "Action",
     key: "action",
@@ -59,6 +59,7 @@ export default function Spend() {
   const getTransactions = async () => {
     const response = await fetch(`/api/spend?page=${currentPage}`);
     const { data, totalPages } = await response.json();
+    console.log(data);
     setTransactions(data);
     setTotalPages(totalPages);
   };
