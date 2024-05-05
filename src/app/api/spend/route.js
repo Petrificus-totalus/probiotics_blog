@@ -6,12 +6,57 @@ export const dynamic = "force-dynamic";
 export const GET = async () => {
   try {
     const db = await getMySQLConnection();
-    // console.log(db);
+    const page = 1; // 页数
+    const count = 4; // 每页记录数
 
-    // const [data] = await db.execute("SELECT * FROM user");
+    const offset = (page - 1) * count;
+    const [datesResult] = await db.query(
+      `SELECT DISTINCT date FROM transactions ORDER BY date DESC LIMIT ? OFFSET ?`,
+      [count, offset]
+    );
 
+    // console.log(datesResult);
+    // Extract dates for the next query
+    const dates = datesResult.map((d) => d.date);
+
+    if (dates.length === 0) {
+      return []; // No transactions for these dates
+    }
+
+    // Second query to get transactions based on the dates fetched
+    const [transactions] = await db.query(
+      `
+        SELECT transactionID, title, price, location, date, description
+        FROM transactions
+        WHERE date IN (?)
+        ORDER BY date DESC, transactionID ASC
+    `,
+      [dates]
+    );
+    // console.log(transactions);
     db.end();
-    return new NextResponse(JSON.stringify({ data: { age: 1 } }), {
+
+    // Process results to group by date
+    const grouped = transactions.reduce((acc, item) => {
+      if (!acc[item.date]) {
+        acc[item.date] = {
+          date: item.date,
+          total: 0,
+          transactions: [],
+        };
+      }
+      acc[item.date].transactions.push({
+        transactionID: item.transactionID,
+        description: item.description,
+        price: item.price,
+        location: item.location,
+        title: item.title,
+      });
+      acc[item.date].total += parseFloat(item.price);
+      return acc;
+    }, {});
+
+    return new NextResponse(JSON.stringify({ data: Object.values(grouped) }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
@@ -35,15 +80,35 @@ export const POST = async (request) => {
     const req = await request.formData();
     const { date, description, location, title, price, tags } =
       Object.fromEntries(req);
-    console.log(date, description, location, title, price, tags);
-    console.log(Array.isArray(tags));
-    // const sql = `UPDATE user
-    //        SET Account = ?, Password = ?, Access = ?
-    //        WHERE UserID = ?`;
-    // const data = [Account, Password, Access, UserID];
-    // await db.query(sql, data);
 
-    // db.end();
+    const insertTransactionQuery = `
+INSERT INTO transactions (date, description, location, title, price)
+VALUES (?, ?, ?, ?, ?)
+`;
+    const transactionValues = [
+      new Date(date),
+      description,
+      location,
+      title,
+      parseFloat(price),
+    ];
+    const [{ insertId }] = await db.execute(
+      insertTransactionQuery,
+      transactionValues
+    );
+
+    // 2. 根据tags字符串将tags分割成单独的tagID
+    const tagIDs = tags.split(",").map((tag) => parseInt(tag.trim()));
+
+    // 3. 将每个tagID插入transaction_tag表
+    const insertTransactionTagQuery = `
+    INSERT INTO transaction_tag (transactionID, tagID)
+    VALUES (?, ?)
+    `;
+    for (const tagID of tagIDs) {
+      await db.execute(insertTransactionTagQuery, [insertId, tagID]);
+    }
+    db.end();
     return new NextResponse(JSON.stringify({ status: "success" }), {
       status: 200,
       headers: {

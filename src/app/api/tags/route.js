@@ -6,10 +6,7 @@ export const dynamic = "force-dynamic";
 export const GET = async () => {
   try {
     const db = await getMySQLConnection();
-    // console.log(db);
-
     const [data] = await db.execute("SELECT * FROM tags");
-
     db.end();
     return new NextResponse(JSON.stringify({ data }), {
       status: 200,
