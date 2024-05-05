@@ -1,5 +1,11 @@
+"use client";
+import UploadSpend from "@/components/createSpend/createspend";
 import React from "react";
 
 export default function page() {
-  return <div>spend</div>;
+  return (
+    <div>
+      <UploadSpend />
+    </div>
+  );
 }
