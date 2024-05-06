@@ -35,7 +35,7 @@ export const GET = async (req) => {
     }
 
     // Second query to get transactions based on the dates fetched
-    const [transactions] = await db.query(
+    const [transactions] = await db.execute(
       `
         SELECT transactionID, title, price, location, date, description
         FROM transactions
@@ -46,7 +46,7 @@ export const GET = async (req) => {
     );
     // console.log(transactions);
     // Fetch tags for these transactions
-    const [tags] = await db.query(
+    const [tags] = await db.execute(
       `
           SELECT tt.transactionID, tg.tag
           FROM transaction_tag tt
@@ -56,7 +56,7 @@ export const GET = async (req) => {
       [transactions.map((t) => t.transactionID)]
     );
 
-    const [links] = await db.query(
+    const [links] = await db.execute(
       `
           SELECT tl.transactionID, l.link
           FROM transaction_link tl

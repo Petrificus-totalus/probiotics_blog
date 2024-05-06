@@ -9,21 +9,21 @@ import { MenuFoldOutlined, UserOutlined } from "@ant-design/icons";
 export default function Menulist() {
   const path = usePathname();
   const items = [
-    // {
-    //   key: "bank_account",
-    //   label: "Account",
-    //   icon: <UserOutlined />,
-    //   children: [
-    //     {
-    //       key: "/spend",
-    //       label: <Link href="/spend">spend</Link>,
-    //     },
-    //     {
-    //       key: "/chart",
-    //       label: <Link href="/chart">chart</Link>,
-    //     },
-    //   ],
-    // },
+    {
+      key: "bank_account",
+      label: "Account",
+      icon: <UserOutlined />,
+      children: [
+        {
+          key: "/spend",
+          label: <Link href="/spend">spend</Link>,
+        },
+        {
+          key: "/chart",
+          label: <Link href="/chart">chart</Link>,
+        },
+      ],
+    },
     {
       key: "learn",
       label: "Learn",
