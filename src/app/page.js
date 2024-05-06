@@ -5,7 +5,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/spend");
+    router.push("/h5c3");
   }, [router]);
 
   return null;
