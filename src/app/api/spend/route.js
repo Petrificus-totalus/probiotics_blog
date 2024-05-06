@@ -9,9 +9,11 @@ export const GET = async (req) => {
     const url = new URL(req.url);
     const searchParams = new URLSearchParams(url.searchParams);
     const page = parseInt(searchParams.get("page") || "1");
+
     const [total] = await db.execute(
       "SELECT COUNT(DISTINCT date) as total FROM transactions"
     );
+    console.log(total);
     const count = 3; // 每页记录数
     const totalPages = Math.ceil(total[0].total / count);
 
@@ -21,7 +23,7 @@ export const GET = async (req) => {
       [count, offset]
     );
 
-    // console.log(datesResult);
+    console.log(datesResult);
     // Extract dates for the next query
     const dates = datesResult.map((d) => d.date);
 
@@ -35,7 +37,7 @@ export const GET = async (req) => {
     }
 
     // Second query to get transactions based on the dates fetched
-    const [transactions] = await db.execute(
+    const [transactions] = await db.query(
       `
         SELECT transactionID, title, price, location, date, description
         FROM transactions
@@ -44,9 +46,9 @@ export const GET = async (req) => {
     `,
       [dates]
     );
-    // console.log(transactions);
+    console.log(transactions);
     // Fetch tags for these transactions
-    const [tags] = await db.execute(
+    const [tags] = await db.query(
       `
           SELECT tt.transactionID, tg.tag
           FROM transaction_tag tt
@@ -56,7 +58,7 @@ export const GET = async (req) => {
       [transactions.map((t) => t.transactionID)]
     );
 
-    const [links] = await db.execute(
+    const [links] = await db.query(
       `
           SELECT tl.transactionID, l.link
           FROM transaction_link tl
@@ -95,6 +97,7 @@ export const GET = async (req) => {
       return acc;
     }, {});
 
+    console.log(grouped);
     return new NextResponse(
       JSON.stringify({ data: Object.values(grouped), totalPages }),
       {
