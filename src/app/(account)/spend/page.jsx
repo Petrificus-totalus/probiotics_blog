@@ -1,9 +1,10 @@
 "use client";
-import UploadSpend from "@/components/createSpend/createspend";
+import CreateSpend from "@/components/createSpend/createspend";
 import React, { useEffect, useState } from "react";
 import styles from "./spend.module.css";
 import moment from "moment";
 import { Card, Tag, Space, Table, Button, Modal, Carousel, Spin } from "antd";
+import AddTag from "@/components/addTransactionTag/addTag";
 
 export default function Spend() {
   const [transactions, setTransactions] = useState([]);
@@ -91,10 +92,15 @@ export default function Spend() {
   const handleNext = () => {
     setCurrentPage((current) => Math.min(totalPages, current + 1));
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <UploadSpend />
+        <div className={styles.buttons}>
+          <CreateSpend finish={getTransactions} />
+          <AddTag />
+        </div>
+
         <div>
           <Button
             style={{ marginRight: "10px" }}

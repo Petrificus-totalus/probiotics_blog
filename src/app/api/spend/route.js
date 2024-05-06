@@ -13,7 +13,7 @@ export const GET = async (req) => {
     const [total] = await db.execute(
       "SELECT COUNT(DISTINCT date) as total FROM transactions"
     );
-    console.log(total);
+    // console.log(total);
     const count = 3; // 每页记录数
     const totalPages = Math.ceil(total[0].total / count);
 
@@ -23,7 +23,7 @@ export const GET = async (req) => {
       [count, offset]
     );
 
-    console.log(datesResult);
+    // console.log(datesResult);
     // Extract dates for the next query
     const dates = datesResult.map((d) => d.date);
 
@@ -46,7 +46,7 @@ export const GET = async (req) => {
     `,
       [dates]
     );
-    console.log(transactions);
+    // console.log(transactions);
     // Fetch tags for these transactions
     const [tags] = await db.query(
       `

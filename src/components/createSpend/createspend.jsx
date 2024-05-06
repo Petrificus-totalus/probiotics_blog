@@ -7,7 +7,7 @@ import S3UploadForm from "@/components/S3UploadForm/uploadForm";
 
 const { Option } = Select;
 
-const UploadSpend = () => {
+const UploadSpend = ({ finish }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [tags, setTags] = useState([]);
@@ -38,6 +38,7 @@ const UploadSpend = () => {
       });
 
       setIsModalOpen(false);
+      await finish();
       form.resetFields();
       setFiles([]);
     } catch (error) {

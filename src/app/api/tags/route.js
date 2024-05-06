@@ -26,35 +26,46 @@ export const GET = async () => {
   }
 };
 
-// export const POST = async (request) => {
-//   try {
-//     const db = await getMySQLConnection();
-//     const req = await request.formData();
-//     const { date, description, location, title, price, tags } =
-//       Object.fromEntries(req);
-//     console.log(date, description, location, title, price, tags);
-//     console.log(Array.isArray(tags));
-//     // const sql = `UPDATE user
-//     //        SET Account = ?, Password = ?, Access = ?
-//     //        WHERE UserID = ?`;
-//     // const data = [Account, Password, Access, UserID];
-//     // await db.query(sql, data);
+export const POST = async (request) => {
+  try {
+    const db = await getMySQLConnection();
+    const req = await request.formData();
+    const { tag } = Object.fromEntries(req);
+    console.log(tag);
+    const tags = tag.split(",");
+    console.log(tags);
+    const sql = `
+    INSERT INTO tags (tag)
+    VALUES (?)
+    `;
+    const repeated = [];
+    for (let t of tags) {
+      const [total] = await db.execute(
+        `SELECT COUNT(tag) as total FROM tags WHERE tags.tag = ?`,
+        [t]
+      );
+      if (total[0].total > 0) {
+        repeated.push(t);
+      } else {
+        await db.execute(sql, [t.trim()]);
+      }
+    }
 
-//     // db.end();
-//     return new NextResponse(JSON.stringify({ status: "success" }), {
-//       status: 200,
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Database connection or query error:", error);
-//     db?.end();
-//     return new NextResponse(JSON.stringify({ error: error.message }), {
-//       status: 500,
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-//   }
-// };
+    db.end();
+    return new NextResponse(JSON.stringify({ status: "success", repeated }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("Database connection or query error:", error);
+    db?.end();
+    return new NextResponse(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+};
