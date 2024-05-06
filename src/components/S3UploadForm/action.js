@@ -12,7 +12,7 @@ const s3Client = new S3Client({
 
 async function uploadFileToS3(file, fileName) {
   const fileBuffer = file;
-  console.log(fileName);
+  // console.log(fileName);
   const filename = `transactions/${fileName}-${Date.now()}`;
 
   const params = {
@@ -27,12 +27,11 @@ async function uploadFileToS3(file, fileName) {
   return filename;
 }
 
-export async function uploadFile(prevState, formData) {
+export async function uploadFile(formData) {
   try {
     const uploadedFiles = [];
     const files = formData.getAll("file");
 
-    console.log(files);
     for (const file of files) {
       const buffer = Buffer.from(await file.arrayBuffer());
       const fileName = await uploadFileToS3(buffer, file.name);

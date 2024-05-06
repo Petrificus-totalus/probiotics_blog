@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, DatePicker, Select, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -12,6 +12,7 @@ const UploadSpend = () => {
   const [form] = Form.useForm();
   const [tags, setTags] = useState([]);
   const [files, setFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
   const showModal = async () => {
     setIsModalOpen(true);
@@ -24,21 +25,21 @@ const UploadSpend = () => {
     try {
       const values = await form.validateFields();
 
-      // if (!values.description) values.description = "";
-      // values.date = moment(values.date.toDate()).format("YYYY-MM-DD");
-      // const formData = new FormData();
-      // for (var key in values) {
-      //   formData.append(key, values[key]);
-      // }
+      if (!values.description) values.description = "";
+      values.date = moment(values.date.toDate()).format("YYYY-MM-DD");
+      const formData = new FormData();
+      for (var key in values) {
+        formData.append(key, values[key]);
+      }
+      formData.append("files", files);
+      await fetch("/api/spend", {
+        method: "POST",
+        body: formData,
+      });
 
-      // await fetch("/api/spend", {
-      //   method: "POST",
-      //   body: formData,
-      // });
-
-      // setIsModalOpen(false);
-      // form.resetFields();
-      // setFileList([]);
+      setIsModalOpen(false);
+      form.resetFields();
+      setFiles([]);
     } catch (error) {
       console.log("Error uploading data:", error);
     }
@@ -48,6 +49,15 @@ const UploadSpend = () => {
     setIsModalOpen(false);
   };
 
+  const modalFooter = [
+    <Button key="back" onClick={handleCancel}>
+      Cancel
+    </Button>,
+    <Button key="submit" type="primary" onClick={handleOk} disabled={uploading}>
+      Add Transaction
+    </Button>,
+  ];
+
   return (
     <>
       <Button type="primary" onClick={showModal}>
@@ -56,7 +66,7 @@ const UploadSpend = () => {
       <Modal
         title="Add Transaction"
         open={isModalOpen}
-        onOk={handleOk}
+        footer={modalFooter}
         onCancel={handleCancel}
       >
         <Form form={form} layout="vertical">
@@ -89,7 +99,7 @@ const UploadSpend = () => {
             <Input.TextArea />
           </Form.Item>
         </Form>
-        <S3UploadForm setFiles={setFiles} />
+        <S3UploadForm setFiles={setFiles} setUploading={setUploading} />
         {files.map((item) => (
           <div key={item}>{item}</div>
         ))}

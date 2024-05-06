@@ -1,5 +1,12 @@
-import styles from "./page.module.css";
-
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 export default function Home() {
-  return <main className={styles.main}></main>;
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/spend");
+  }, [router]);
+
+  return null;
 }
