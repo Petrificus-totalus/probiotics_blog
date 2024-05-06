@@ -3,7 +3,7 @@ import UploadSpend from "@/components/createSpend/createspend";
 import React, { useEffect, useState } from "react";
 import styles from "./spend.module.css";
 import moment from "moment";
-import { Card, Tag, Space, Table, Button, Modal, Carousel } from "antd";
+import { Card, Tag, Space, Table, Button, Modal, Carousel, Spin } from "antd";
 
 const columns = [
   {
@@ -17,12 +17,14 @@ const columns = [
     dataIndex: "location",
     key: "location",
   },
+
   {
     title: "Price",
     dataIndex: "price",
     key: "price",
     render: (text) => <span>{parseFloat(text).toFixed(2)}</span>,
   },
+
   {
     title: "Tags",
     key: "tags",
@@ -55,13 +57,15 @@ export default function Spend() {
   const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [spin, setSpin] = useState(false);
 
   const getTransactions = async () => {
+    setSpin(true);
     const response = await fetch(`/api/spend?page=${currentPage}`);
     const { data, totalPages } = await response.json();
-    console.log(data);
     setTransactions(data);
     setTotalPages(totalPages);
+    setSpin(false);
   };
   useEffect(() => {
     getTransactions(currentPage);
@@ -75,31 +79,41 @@ export default function Spend() {
     setCurrentPage((current) => Math.min(totalPages, current + 1));
   };
   return (
-    <div>
-      <UploadSpend />
-      <div className={styles.content}>
-        {transactions.map(({ date, total, transactions }) => (
-          <Card
-            title={moment(date).format("YYYY-MM-DD")}
-            hoverable
-            extra={<strong>{total.toFixed(2)}</strong>}
-            key={date}
-            style={{ marginBottom: "20px" }}
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <UploadSpend />
+        <div>
+          <Button
+            style={{ marginRight: "10px" }}
+            onClick={handlePrev}
+            disabled={currentPage === 1}
           >
-            <Table
-              columns={columns}
-              dataSource={transactions}
-              showHeader={false}
-              pagination={false}
-            />
-          </Card>
-        ))}
-        <Button onClick={handlePrev} disabled={currentPage === 1}>
-          Previous
-        </Button>
-        <Button onClick={handleNext} disabled={currentPage === totalPages}>
-          Next
-        </Button>
+            Previous
+          </Button>
+          <Button onClick={handleNext} disabled={currentPage === totalPages}>
+            Next
+          </Button>
+        </div>
+      </div>
+      <div className={styles.content}>
+        <Spin spinning={spin}>
+          {transactions.map(({ date, total, transactions }) => (
+            <Card
+              title={moment(date).format("YYYY-MM-DD")}
+              hoverable
+              extra={<strong>{total.toFixed(2)}</strong>}
+              key={date}
+              style={{ marginBottom: "20px" }}
+            >
+              <Table
+                columns={columns}
+                dataSource={transactions}
+                showHeader={false}
+                pagination={false}
+              />
+            </Card>
+          ))}
+        </Spin>
       </div>
     </div>
   );

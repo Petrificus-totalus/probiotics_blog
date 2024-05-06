@@ -3,41 +3,42 @@ import React, { useState } from "react";
 import { Modal, Button, Form, Input, DatePicker, Select, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import moment from "moment";
+import S3UploadForm from "@/components/S3UploadForm/uploadForm";
+
 const { Option } = Select;
 
 const UploadSpend = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
-  const [fileList, setFileList] = useState([]);
   const [tags, setTags] = useState([]);
+  const [files, setFiles] = useState([]);
 
   const showModal = async () => {
     setIsModalOpen(true);
     const response = await fetch("/api/tags");
     const { data } = await response.json();
     setTags(data);
-    console.log(data);
   };
 
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
 
-      if (!values.description) values.description = "";
-      values.date = moment(values.date.toDate()).format("YYYY-MM-DD");
-      const formData = new FormData();
-      for (var key in values) {
-        formData.append(key, values[key]);
-      }
+      // if (!values.description) values.description = "";
+      // values.date = moment(values.date.toDate()).format("YYYY-MM-DD");
+      // const formData = new FormData();
+      // for (var key in values) {
+      //   formData.append(key, values[key]);
+      // }
 
-      await fetch("/api/spend", {
-        method: "POST",
-        body: formData,
-      });
+      // await fetch("/api/spend", {
+      //   method: "POST",
+      //   body: formData,
+      // });
 
-      setIsModalOpen(false);
-      form.resetFields();
-      setFileList([]);
+      // setIsModalOpen(false);
+      // form.resetFields();
+      // setFileList([]);
     } catch (error) {
       console.log("Error uploading data:", error);
     }
@@ -45,9 +46,6 @@ const UploadSpend = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-  };
-  const handleUploadChange = ({ fileList }) => {
-    setFileList(fileList);
   };
 
   return (
@@ -90,19 +88,11 @@ const UploadSpend = () => {
           <Form.Item name="description" label="Description">
             <Input.TextArea />
           </Form.Item>
-          <Form.Item name="image" label="Upload Image">
-            <Upload
-              beforeUpload={() => false}
-              listType="picture"
-              multiple={true}
-              onChange={handleUploadChange}
-            >
-              <Button icon={<UploadOutlined />}>
-                Click to upload (optional)
-              </Button>
-            </Upload>
-          </Form.Item>
         </Form>
+        <S3UploadForm setFiles={setFiles} />
+        {files.map((item) => (
+          <div key={item}>{item}</div>
+        ))}
       </Modal>
     </>
   );
