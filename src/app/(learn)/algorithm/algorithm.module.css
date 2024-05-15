@@ -1,0 +1,9 @@
+.container {
+  margin: 10px;
+  background: #fff;
+  padding: 10px;
+}
+.header {
+  display: flex;
+  gap: 15px;
+}
