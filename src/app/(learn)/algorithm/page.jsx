@@ -1,5 +1,16 @@
 "use client";
-import { Button, Modal, Form, Input, Select, List, Row, Col, Tag } from "antd";
+import {
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  List,
+  Row,
+  Col,
+  Tag,
+  Spin,
+} from "antd";
 import React, { useState, useEffect } from "react";
 import useMarkdownEditor from "@/hook/MarkdownEditor";
 import MdEditor from "react-markdown-editor-lite";
@@ -7,6 +18,12 @@ import styles from "./algorithm.module.css";
 import "react-markdown-editor-lite/lib/index.css";
 import Link from "next/link";
 const { Option } = Select;
+
+const tagColor = {
+  easy: "green",
+  medium: "orange",
+  hard: "red",
+};
 
 export default function Algorithm() {
   const [data, setData] = useState([]);
@@ -22,6 +39,7 @@ export default function Algorithm() {
   const [selectedSearchTags, setSelectedSearchTags] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [isSpinning, setIsSpinning] = useState(false);
 
   const handleOk = async () => {
     try {
@@ -56,12 +74,14 @@ export default function Algorithm() {
     getTags();
   }, []);
   const getAlgorithms = async (currentPage) => {
+    setIsSpinning(true);
     const response = await fetch(`/api/algorithm?page=${currentPage}`);
     const { data, totalPages } = await response.json();
 
     console.log(data);
     setData(data);
     setTotalPages(totalPages);
+    setIsSpinning(false);
   };
   useEffect(() => {
     getAlgorithms(currentPage);
@@ -177,28 +197,31 @@ export default function Algorithm() {
         </Form>
       </Modal>
 
-      <List
-        itemLayout="horizontal"
-        dataSource={data}
-        renderItem={(item) => {
-          const displayText = `${item.difficulty}  ${item.description}`;
+      <Spin spinning={isSpinning}>
+        <List
+          itemLayout="horizontal"
+          dataSource={data}
+          renderItem={(item) => {
+            const displayText = `${item.description}`;
 
-          return (
-            <List.Item
-              onClick={() => showModal(item)}
-              className="custom-list-item"
-            >
-              {item.tags.map((item, index) => (
-                <Tag key={index}>{item}</Tag>
-              ))}
-
-              <Link href={item.link}>Link</Link>
-
-              <List.Item.Meta title={displayText} />
-            </List.Item>
-          );
-        }}
-      />
+            return (
+              <List.Item
+                onClick={() => showModal(item)}
+                className="custom-list-item"
+              >
+                {item.tags.map((item, index) => (
+                  <Tag key={index}>{item}</Tag>
+                ))}
+                <Tag color={tagColor[item.difficulty]}>{item.difficulty}</Tag>
+                <List.Item.Meta title={displayText} />
+                <Link href={item.link} onClick={(e) => e.stopPropagation()}>
+                  Link
+                </Link>
+              </List.Item>
+            );
+          }}
+        />
+      </Spin>
       <Modal
         open={isDetailModalOpen}
         onCancel={() => {
