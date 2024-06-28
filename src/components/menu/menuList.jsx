@@ -4,7 +4,6 @@ import { Menu } from "antd";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import styles from "./menuList.module.css";
-import { MenuFoldOutlined, UserOutlined } from "@ant-design/icons";
 
 export default function Menulist() {
   const path = usePathname();
@@ -12,7 +11,6 @@ export default function Menulist() {
     {
       key: "bank_account",
       label: "Account",
-      icon: <UserOutlined />,
       children: [
         {
           key: "/spend",
@@ -27,7 +25,6 @@ export default function Menulist() {
     {
       key: "learn",
       label: "Learn",
-      icon: <MenuFoldOutlined />,
       children: [
         {
           key: "/algorithm",
@@ -36,6 +33,10 @@ export default function Menulist() {
         {
           key: "/h5c3",
           label: <Link href="/h5c3">h5c3</Link>,
+        },
+        {
+          key: "/network",
+          label: <Link href="/network">network</Link>,
         },
       ],
     },

@@ -1,9 +1,14 @@
 .container {
   margin: 10px;
-  background: #fff;
-  padding: 10px;
 }
 .header {
   display: flex;
+  background: #fff;
   gap: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.content {
+  padding: 0 25px;
 }

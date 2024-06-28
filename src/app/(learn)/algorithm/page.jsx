@@ -1,28 +1,19 @@
 "use client";
-import {
-  Button,
-  Modal,
-  Form,
-  Input,
-  Select,
-  List,
-  Row,
-  Col,
-  Tag,
-  Spin,
-} from "antd";
+import { Button, Modal, Form, Input, Select, Row, Col, Spin } from "antd";
 import React, { useState, useEffect } from "react";
 import useMarkdownEditor from "@/hook/MarkdownEditor";
 import MdEditor from "react-markdown-editor-lite";
 import styles from "./algorithm.module.css";
 import "react-markdown-editor-lite/lib/index.css";
-import Link from "next/link";
-const { Option } = Select;
+import Algorithmcard from "@/components/algorithmCard/algorithmcard";
+import Masonry from "react-masonry-css";
 
-const tagColor = {
-  easy: "green",
-  medium: "orange",
-  hard: "red",
+const { Option } = Select;
+const breakpointColumnsObj = {
+  default: 4,
+  1430: 3,
+  1090: 2,
+  750: 1,
 };
 
 export default function Algorithm() {
@@ -32,7 +23,7 @@ export default function Algorithm() {
   const { markdown, setMarkdown, mdParser, handleEditorChange } =
     useMarkdownEditor();
   const [form] = Form.useForm();
-  const [selectedTags, setSelectedTags] = useState([]);
+  // const [selectedTags, setSelectedTags] = useState([]);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [detail, setDetail] = useState(null);
   const [tags, setTags] = useState([]);
@@ -44,7 +35,6 @@ export default function Algorithm() {
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      console.log(values);
       const formData = new FormData();
       for (var key in values) {
         formData.append(key, values[key]);
@@ -148,9 +138,9 @@ export default function Algorithm() {
             <Select
               placeholder="Select Tags"
               mode="multiple"
-              onChange={(tags) => {
-                setSelectedTags(tags);
-              }}
+              // onChange={(tags) => {
+              //   setSelectedTags(tags);
+              // }}
               options={tags.map((item) => ({
                 value: item.tagID,
                 label: item.tag,
@@ -171,7 +161,15 @@ export default function Algorithm() {
 
           <Row gutter={16}>
             <Col span={8}>
-              <Form.Item name="difficulty">
+              <Form.Item
+                name="difficulty"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please choose Difficulty",
+                  },
+                ]}
+              >
                 <Select placeholder="Select Difficulty">
                   <Option value="easy">Easy</Option>
                   <Option value="medium">Medium</Option>
@@ -198,29 +196,19 @@ export default function Algorithm() {
       </Modal>
 
       <Spin spinning={isSpinning}>
-        <List
-          itemLayout="horizontal"
-          dataSource={data}
-          renderItem={(item) => {
-            const displayText = `${item.description}`;
-
-            return (
-              <List.Item
-                onClick={() => showModal(item)}
-                className="custom-list-item"
-              >
-                {item.tags.map((item, index) => (
-                  <Tag key={index}>{item}</Tag>
-                ))}
-                <Tag color={tagColor[item.difficulty]}>{item.difficulty}</Tag>
-                <List.Item.Meta title={displayText} />
-                <Link href={item.link} onClick={(e) => e.stopPropagation()}>
-                  Link
-                </Link>
-              </List.Item>
-            );
-          }}
-        />
+        <div className={styles.content}>
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className="my-masonry-grid"
+            columnClassName="my-masonry-grid_column"
+          >
+            {data.map((item) => (
+              <div key={item.algorithmID}>
+                <Algorithmcard params={item} showDetail={showModal} />
+              </div>
+            ))}
+          </Masonry>
+        </div>
       </Spin>
       <Modal
         open={isDetailModalOpen}

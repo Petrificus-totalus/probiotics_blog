@@ -21,3 +21,16 @@ await db.query(
   [count, offset]
 );
 ```
+
+# Learn
+
+## algorithm/page.js
+
+For Component <Algorithmcard/> ,i want each click on it will call function `showModal`, but you cannot do
+
+```jsx
+<Algorithmcard onClick={() => showModal(item)} />
+```
+
+Because <Algorithmcard/> isn't a React Node，There's no onClick hook on it，`onClick` is regarded as a parameter passed to the component。
+Instead, you can pass `showModal` as a parameter，and add an `onClick` on the most outside element to call `showModal`

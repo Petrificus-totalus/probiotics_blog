@@ -1,0 +1,27 @@
+.container {
+  width: 300px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  transition: all 0.1s linear;
+}
+.container:hover {
+  transform: scale(1.02);
+}
+.desc {
+  font-weight: bold;
+}
+.content1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.content2 {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
