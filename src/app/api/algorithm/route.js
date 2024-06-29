@@ -14,7 +14,7 @@ export const GET = async (req) => {
       "SELECT COUNT(*) as total FROM algorithms"
     );
     // console.log(total);
-    const count = 10; // 每页记录数
+    const count = 15; // 每页记录数
     const totalPages = Math.ceil(total[0].total / count);
 
     const offset = (page - 1) * count;
