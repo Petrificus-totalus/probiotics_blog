@@ -18,10 +18,10 @@ export const GET = async (req) => {
     const totalPages = Math.ceil(total[0].total / count);
 
     const offset = (page - 1) * count;
-    const [data] = await db.query(`SELECT * FROM algorithms LIMIT ? OFFSET ?`, [
-      count,
-      offset,
-    ]);
+    const [data] = await db.query(
+      `SELECT * FROM algorithms  ORDER BY algorithmID DESC LIMIT ? OFFSET ?`,
+      [count, offset]
+    );
     if (data.length === 0) {
       return new NextResponse(JSON.stringify({ data, totalPages }), {
         status: 200,

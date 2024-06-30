@@ -44,7 +44,7 @@ export default function Algorithm() {
       setIsModalOpen(false);
       form.resetFields();
       setMarkdown("");
-      getAlgorithms(currentPage);
+      getAlgorithms(1);
     } catch (error) {
       console.log("Error uploading data:", error);
     }
