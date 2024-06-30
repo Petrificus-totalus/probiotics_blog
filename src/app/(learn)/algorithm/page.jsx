@@ -1,36 +1,32 @@
 "use client";
 import { Button, Modal, Form, Input, Select, Row, Col, Spin } from "antd";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import useMarkdownEditor from "@/hook/MarkdownEditor";
 import MdEditor from "react-markdown-editor-lite";
 import styles from "./algorithm.module.css";
 import "react-markdown-editor-lite/lib/index.css";
 import Algorithmcard from "@/components/algorithmCard/algorithmcard";
 import Masonry from "react-masonry-css";
+import { masonryCol } from "@/lib/constant";
 
 const { Option } = Select;
-const breakpointColumnsObj = {
-  default: 4,
-  1430: 3,
-  1090: 2,
-  750: 1,
-};
 
 export default function Algorithm() {
+  const contentRef = useRef(null);
   const [data, setData] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { markdown, setMarkdown, mdParser, handleEditorChange } =
     useMarkdownEditor();
   const [form] = Form.useForm();
-  // const [selectedTags, setSelectedTags] = useState([]);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [detail, setDetail] = useState(null);
   const [tags, setTags] = useState([]);
   const [selectedSearchTags, setSelectedSearchTags] = useState([]);
+
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [isSpinning, setIsSpinning] = useState(false);
+  const [lastScrollTop, setLastScrollTop] = useState(0); // 记录上次滚动的位置
 
   const handleOk = async () => {
     try {
@@ -54,51 +50,80 @@ export default function Algorithm() {
     }
   };
 
-  const fetchItemsWithTagsContainingLe = () => {};
-  const getTags = async () => {
-    const response = await fetch("/api/algorithm/tags");
-    const { data } = await response.json();
-    setTags(data);
+  const getSelectedAlgorithm = () => {
+    console.log(selectedSearchTags);
   };
+
   useEffect(() => {
+    const getTags = async () => {
+      const response = await fetch("/api/algorithm/tags");
+      const { data } = await response.json();
+      setTags(data);
+    };
     getTags();
   }, []);
-  const getAlgorithms = async (currentPage) => {
-    setIsSpinning(true);
-    const response = await fetch(`/api/algorithm?page=${currentPage}`);
-    const { data, totalPages } = await response.json();
 
-    console.log(data);
-    setData(data);
-    setTotalPages(totalPages);
-    setIsSpinning(false);
-  };
-  useEffect(() => {
-    getAlgorithms(currentPage);
+  const loadMoreData = useCallback(async () => {
+    setLoading(true);
+    const response = await fetch(`/api/algorithm?page=${currentPage + 1}`);
+    const { data: newData } = await response.json();
+    setData((prevData) => [...prevData, ...newData]);
+    setCurrentPage((currentPage) => currentPage + 1);
+    setLoading(false);
   }, [currentPage]);
+
+  const onScroll = useCallback(() => {
+    const contentElement = contentRef.current;
+    const scrollTop = contentElement.scrollTop;
+    const isScrollingDown = scrollTop > lastScrollTop;
+
+    setLastScrollTop(scrollTop);
+
+    if (
+      isScrollingDown &&
+      contentElement.scrollTop + contentElement.clientHeight >=
+        contentElement.scrollHeight - 10
+    ) {
+      if (!loading) {
+        loadMoreData();
+      }
+    }
+  }, [loading, lastScrollTop, loadMoreData]);
+
+  useEffect(() => {
+    const contentElement = contentRef.current;
+    if (contentElement) {
+      contentElement.addEventListener("scroll", onScroll);
+    }
+    return () => {
+      if (contentElement) {
+        contentElement.removeEventListener("scroll", onScroll);
+      }
+    };
+  }, [onScroll]);
+  const getAlgorithms = async (page) => {
+    setLoading(true);
+    const response = await fetch(`/api/algorithm?page=${page}`);
+    const { data } = await response.json();
+    setData(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getAlgorithms(1);
+  }, []);
   const showModal = (item) => {
     setDetail(item);
     setIsDetailModalOpen(true);
   };
-
-  const handlePrev = () => {
-    setCurrentPage((current) => Math.max(1, current - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentPage((current) => Math.min(totalPages, current + 1));
-  };
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={contentRef}>
       <div className={styles.header}>
         <Button onClick={() => setIsModalOpen(true)}>Add solution</Button>
         <Select
+          className={styles.selector}
           mode="multiple"
           allowClear
-          style={{
-            width: "220px",
-            margin: "0 20px",
-          }}
           placeholder="Please select"
           defaultValue={[]}
           onChange={(tags) => {
@@ -110,21 +135,9 @@ export default function Algorithm() {
           }))}
         />
 
-        <Button onClick={fetchItemsWithTagsContainingLe} type="primary">
+        <Button onClick={getSelectedAlgorithm} type="primary">
           Search
         </Button>
-        <div>
-          <Button
-            style={{ marginRight: "10px" }}
-            onClick={handlePrev}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </Button>
-          <Button onClick={handleNext} disabled={currentPage === totalPages}>
-            Next
-          </Button>
-        </div>
       </div>
       <Modal
         open={isModalOpen}
@@ -195,10 +208,10 @@ export default function Algorithm() {
         </Form>
       </Modal>
 
-      <Spin spinning={isSpinning}>
+      <Spin spinning={loading}>
         <div className={styles.content}>
           <Masonry
-            breakpointCols={breakpointColumnsObj}
+            breakpointCols={masonryCol}
             className="my-masonry-grid"
             columnClassName="my-masonry-grid_column"
           >

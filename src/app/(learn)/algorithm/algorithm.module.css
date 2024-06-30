@@ -1,5 +1,7 @@
 .container {
   margin: 10px;
+  overflow: auto;
+  height: 100vh;
 }
 .header {
   display: flex;
@@ -7,8 +9,18 @@
   gap: 15px;
   padding: 20px;
   margin-bottom: 20px;
+  position: fixed; /* 固定位置 */
+  top: 0; /* 顶部对齐 */
+  width: 100%; /* 宽度为100% */
+  z-index: 1000;
 }
 
 .content {
+  margin-top: 70px;
   padding: 0 25px;
+}
+
+.selector {
+  width: 220px;
+  margin: 0 20px;
 }

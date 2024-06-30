@@ -4,8 +4,9 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export const GET = async (req) => {
+  const db = await getMySQLConnection();
+
   try {
-    const db = await getMySQLConnection();
     const url = new URL(req.url);
     const searchParams = new URLSearchParams(url.searchParams);
     const page = parseInt(searchParams.get("page") || "1");
@@ -13,8 +14,7 @@ export const GET = async (req) => {
     const [total] = await db.execute(
       "SELECT COUNT(*) as total FROM algorithms"
     );
-    // console.log(total);
-    const count = 15; // 每页记录数
+    const count = 20; // 每页记录数
     const totalPages = Math.ceil(total[0].total / count);
 
     const offset = (page - 1) * count;
@@ -22,6 +22,14 @@ export const GET = async (req) => {
       count,
       offset,
     ]);
+    if (data.length === 0) {
+      return new NextResponse(JSON.stringify({ data, totalPages }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
     await Promise.all(
       data.map(async (algorithm) => {
         const [tags] = await db.query(
@@ -54,6 +62,8 @@ export const GET = async (req) => {
         "Content-Type": "application/json",
       },
     });
+  } finally {
+    db.release();
   }
 };
 
