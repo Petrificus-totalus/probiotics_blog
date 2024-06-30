@@ -1,8 +1,8 @@
 .container {
   height: 100vh;
-  width: 12vw;
+  /* width: 256px; */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   background-color: #020c16;
 }
