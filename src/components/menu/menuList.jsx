@@ -45,6 +45,10 @@ export default function Menulist() {
           key: "/network",
           label: <Link href="/network">network</Link>,
         },
+        {
+          key: "/react",
+          label: <Link href="/react">react</Link>,
+        },
       ],
     },
   ];

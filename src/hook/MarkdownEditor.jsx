@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
-import "highlight.js/styles/default.css";
+import "highlight.js/styles/a11y-light.css";
 
 const useMarkdownEditor = () => {
   const [markdown, setMarkdown] = useState("");
