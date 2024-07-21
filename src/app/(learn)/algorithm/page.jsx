@@ -249,7 +249,6 @@ export default function Algorithm() {
             {detail.markdown}
           </Markdown>
         )}
-        ,
       </Modal>
     </div>
   );
