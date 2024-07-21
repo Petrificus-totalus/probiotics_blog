@@ -5,6 +5,7 @@ import "highlight.js/styles/a11y-light.css";
 
 const useMarkdownEditor = () => {
   const [markdown, setMarkdown] = useState("");
+
   const mdParser = new MarkdownIt({
     highlight: function (str, lang) {
       if (lang && hljs.getLanguage(lang)) {

@@ -8,6 +8,9 @@ import "react-markdown-editor-lite/lib/index.css";
 import Algorithmcard from "@/components/algorithmCard/algorithmcard";
 import Masonry from "react-masonry-css";
 import { masonryCol } from "@/lib/constant";
+import Markdown from "markdown-to-jsx";
+
+import Code from "@/components/Code/code";
 
 const { Option } = Select;
 
@@ -36,6 +39,7 @@ export default function Algorithm() {
         formData.append(key, values[key]);
       }
       formData.append("markdown", markdown);
+
       await fetch("/api/algorithm", {
         method: "POST",
         body: formData,
@@ -233,12 +237,19 @@ export default function Algorithm() {
         className="modal-content"
       >
         {detail && (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: mdParser.render(detail.markdown),
+          <Markdown
+            options={{
+              overrides: {
+                code: {
+                  component: Code,
+                },
+              },
             }}
-          />
+          >
+            {detail.markdown}
+          </Markdown>
         )}
+        ,
       </Modal>
     </div>
   );

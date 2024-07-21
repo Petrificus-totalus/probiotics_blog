@@ -29,6 +29,11 @@ export default function ReactDetail({ params }) {
             code: {
               component: Code,
             },
+            ha: {
+              component: ({ children }) => (
+                <span style={{ color: "red" }}>{children}</span>
+              ),
+            },
           },
         }}
       >
