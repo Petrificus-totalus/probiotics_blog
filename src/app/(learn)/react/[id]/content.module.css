@@ -1,6 +1,11 @@
 .container {
-  padding: 10px 80px;
+  padding: 10px 50px;
 }
 .back {
   margin-bottom: 40px;
+}
+
+.markdown {
+  padding: 10px;
+  background-color: #fff;
 }

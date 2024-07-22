@@ -24,14 +24,27 @@ export default function ReactDetail({ params }) {
         back
       </button>
       <Markdown
+        className={styles.markdown}
         options={{
           overrides: {
             code: {
               component: Code,
             },
-            ha: {
+            h1: {
               component: ({ children }) => (
-                <span style={{ color: "red" }}>{children}</span>
+                <h1 style={{ margin: "20px 0" }}>{children}</h1>
+              ),
+            },
+            h2: {
+              component: ({ children }) => (
+                <h2 style={{ margin: "10px 0" }}>{children}</h2>
+              ),
+            },
+            li: {
+              component: ({ children }) => (
+                <li style={{ marginLeft: "20px", marginBottom: "5px" }}>
+                  {children}
+                </li>
               ),
             },
           },
