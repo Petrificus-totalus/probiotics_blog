@@ -17,7 +17,7 @@ export default function ReactPage() {
   return (
     <div className={styles.container}>
       {items.map((item) => (
-        <Item item={item} key={item.reactID} />
+        <Item item={item} key={item["reactID"]} />
       ))}
     </div>
   );

@@ -1,6 +1,12 @@
 "use client";
 import { Button, Modal, Form, Input, Select, Row, Col, Spin } from "antd";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  RefObject,
+} from "react";
 import useMarkdownEditor from "@/hook/MarkdownEditor";
 import MdEditor from "react-markdown-editor-lite";
 import styles from "./algorithm.module.css";
@@ -13,18 +19,26 @@ import Markdown from "markdown-to-jsx";
 import Code from "@/components/Code/code";
 
 const { Option } = Select;
-
-export default function Algorithm() {
-  const contentRef = useRef(null);
-  const [data, setData] = useState([]);
+interface AlgorithmItem {
+  algorithmID: string;
+  markdown: string;
+  [key: string]: any;
+}
+interface Tag {
+  tagID: string;
+  tag: string;
+}
+const Algorithm: React.FC = () => {
+  const contentRef: RefObject<HTMLDivElement> = useRef(null);
+  const [data, setData] = useState<AlgorithmItem[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { markdown, setMarkdown, mdParser, handleEditorChange } =
     useMarkdownEditor();
   const [form] = Form.useForm();
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [detail, setDetail] = useState(null);
-  const [tags, setTags] = useState([]);
+  const [detail, setDetail] = useState<AlgorithmItem | null>(null);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [selectedSearchTags, setSelectedSearchTags] = useState([]);
 
   const [loading, setLoading] = useState(false);
@@ -78,18 +92,20 @@ export default function Algorithm() {
 
   const onScroll = useCallback(() => {
     const contentElement = contentRef.current;
-    const scrollTop = contentElement.scrollTop;
-    const isScrollingDown = scrollTop > lastScrollTop;
+    if (contentElement) {
+      const scrollTop = contentElement.scrollTop ?? 0;
+      const isScrollingDown = scrollTop > lastScrollTop;
 
-    setLastScrollTop(scrollTop);
+      setLastScrollTop(scrollTop);
 
-    if (
-      isScrollingDown &&
-      contentElement.scrollTop + contentElement.clientHeight >=
-        contentElement.scrollHeight - 10
-    ) {
-      if (!loading) {
-        loadMoreData();
+      if (
+        isScrollingDown &&
+        contentElement.scrollTop + contentElement.clientHeight >=
+          contentElement.scrollHeight - 10
+      ) {
+        if (!loading) {
+          loadMoreData();
+        }
       }
     }
   }, [loading, lastScrollTop, loadMoreData]);
@@ -105,7 +121,7 @@ export default function Algorithm() {
       }
     };
   }, [onScroll]);
-  const getAlgorithms = async (page) => {
+  const getAlgorithms = async (page: any) => {
     setLoading(true);
     const response = await fetch(`/api/algorithm?page=${page}`);
     const { data } = await response.json();
@@ -116,7 +132,7 @@ export default function Algorithm() {
   useEffect(() => {
     getAlgorithms(1);
   }, []);
-  const showModal = (item) => {
+  const showModal = (item: AlgorithmItem) => {
     setDetail(item);
     setIsDetailModalOpen(true);
   };
@@ -252,4 +268,6 @@ export default function Algorithm() {
       </Modal>
     </div>
   );
-}
+};
+
+export default Algorithm;
