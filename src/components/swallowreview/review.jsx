@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import styles from "./Review.module.css";
+import styles from "./review.module.css";
 
 export default function Review({ params }) {
   return (
