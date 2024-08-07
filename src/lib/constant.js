@@ -10,3 +10,9 @@ export const masonryCol = {
   1090: 2,
   750: 1,
 };
+export const swallowMasonryCol = {
+  default: 4,
+  1430: 3,
+  1090: 2,
+  750: 1,
+};

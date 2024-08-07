@@ -1,0 +1,42 @@
+.reviewCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 300px;
+  margin: 20px;
+  background-color: #fff;
+}
+
+.coverImage {
+  border-radius: 10px;
+}
+
+.info {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.info .restaurant {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.info .rating {
+  color: #ffbf00;
+  font-size: 1.1em;
+  margin: 5px 0;
+}
+
+.info .summary {
+  font-style: italic;
+  color: #666;
+}
+
+.avatar {
+  border-radius: 50%;
+  margin-top: 10px;
+}

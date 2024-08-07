@@ -1,15 +1,26 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Modal, Form, Input, Button, Upload, Rate, Row, Col } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import Masonry from "react-masonry-css";
 
 import styles from "./swallow.module.css";
 import Image from "next/image";
+import { swallowMasonryCol } from "@/lib/constant";
+
+import Review from "@/components/swallowreview/review";
 
 export default function Swallow() {
+  const contentRef = useRef(null);
+
   const [swallowers, setSwallowers] = useState([]);
+  const [reviews, setReviews] = useState([]);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [lastScrollTop, setLastScrollTop] = useState(0); // 记录上次滚动的位置
 
   useEffect(() => {
     const getAvatars = async () => {
@@ -18,6 +29,16 @@ export default function Swallow() {
       setSwallowers(data);
     };
     getAvatars();
+  }, []);
+  const getReviews = async (page) => {
+    setLoading(true);
+    const response = await fetch(`/api/swallow/review?page=${page}`);
+    const { data } = await response.json();
+    setReviews(data);
+    setLoading(false);
+  };
+  useEffect(() => {
+    getReviews(1);
   }, []);
 
   const showModal = () => {
@@ -52,22 +73,63 @@ export default function Swallow() {
         method: "POST",
         body: formData,
       });
+      // console.log(response);
 
-      // if (response.ok) {
-      //   const data = await response.json();
-      //   console.log("Record added successfully:", data);
-      //   setIsModalVisible(false);
-      //   form.resetFields();
-      // } else {
-      //   console.error("Failed to add record");
-      // }
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Record added successfully:", data);
+        setIsModalVisible(false);
+        form.resetFields();
+        getReviews(1);
+      } else {
+        console.error("Failed to add record");
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  const loadMoreData = useCallback(async () => {
+    setLoading(true);
+    const response = await fetch(`/api/swallow/review?page=${currentPage + 1}`);
+    const { data: newData } = await response.json();
+    setReviews((prevData) => [...prevData, ...newData]);
+    setCurrentPage((currentPage) => currentPage + 1);
+    setLoading(false);
+  }, [currentPage]);
+  const onScroll = useCallback(() => {
+    const contentElement = contentRef.current;
+    if (contentElement) {
+      const scrollTop = contentElement.scrollTop ?? 0;
+      const isScrollingDown = scrollTop > lastScrollTop;
+
+      setLastScrollTop(scrollTop);
+
+      if (
+        isScrollingDown &&
+        contentElement.scrollTop + contentElement.clientHeight >=
+          contentElement.scrollHeight - 10
+      ) {
+        if (!loading) {
+          loadMoreData();
+        }
+      }
+    }
+  }, [loading, lastScrollTop, loadMoreData]);
+
+  useEffect(() => {
+    const contentElement = contentRef.current;
+    if (contentElement) {
+      contentElement.addEventListener("scroll", onScroll);
+    }
+    return () => {
+      if (contentElement) {
+        contentElement.removeEventListener("scroll", onScroll);
+      }
+    };
+  }, [onScroll]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={contentRef}>
       <div className={styles.header}>
         <div className={styles.headerbar}>
           <span className={styles.title}>Top Devourers</span>
@@ -90,7 +152,19 @@ export default function Swallow() {
           ))}
         </div>
       </div>
-      <div className={styles.content}></div>
+      <div className={styles.content}>
+        <Masonry
+          breakpointCols={swallowMasonryCol}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
+        >
+          {reviews.map((item) => (
+            <div key={item.reviewID}>
+              <Review params={item} />
+            </div>
+          ))}
+        </Masonry>
+      </div>
       <Modal
         title="Add Review"
         open={isModalVisible}

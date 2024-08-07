@@ -1,5 +1,4 @@
 "use server";
-import { revalidatePath } from "next/cache";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const s3Client = new S3Client({
@@ -12,7 +11,6 @@ const s3Client = new S3Client({
 
 async function uploadFileToS3(file, fileName, folder) {
   const fileBuffer = file;
-  // console.log(fileName);
   const filename = `${folder}/${fileName}-${Date.now()}`;
 
   const params = {
