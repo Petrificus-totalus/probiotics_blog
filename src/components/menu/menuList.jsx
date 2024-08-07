@@ -51,6 +51,10 @@ export default function Menulist() {
         },
       ],
     },
+    {
+      key: "swallow",
+      label: <Link href="/swallow">Swallow</Link>,
+    },
   ];
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);

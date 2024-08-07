@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Input, DatePicker, Select, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Modal, Button, Form, Input, DatePicker, Select } from "antd";
 import moment from "moment";
 import S3UploadForm from "@/components/S3UploadForm/uploadForm";
 

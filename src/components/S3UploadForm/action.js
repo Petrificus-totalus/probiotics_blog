@@ -10,10 +10,10 @@ const s3Client = new S3Client({
   },
 });
 
-async function uploadFileToS3(file, fileName) {
+async function uploadFileToS3(file, fileName, folder) {
   const fileBuffer = file;
   // console.log(fileName);
-  const filename = `transactions/${fileName}-${Date.now()}`;
+  const filename = `${folder}/${fileName}-${Date.now()}`;
 
   const params = {
     Bucket: process.env.NEXT_AWS_S3_BUCKET_NAME,
@@ -31,10 +31,11 @@ export async function uploadFile(formData) {
   try {
     const uploadedFiles = [];
     const files = formData.getAll("file");
+    const folder = formData.get("folder");
 
     for (const file of files) {
       const buffer = Buffer.from(await file.arrayBuffer());
-      const fileName = await uploadFileToS3(buffer, file.name);
+      const fileName = await uploadFileToS3(buffer, file.name, folder);
       uploadedFiles.push(fileName);
     }
 
