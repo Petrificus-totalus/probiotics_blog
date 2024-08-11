@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import styles from "./review.module.css";
+import { Rate } from "antd";
 
 export default function Review({ params }) {
   return (
@@ -14,7 +15,14 @@ export default function Review({ params }) {
       />
       <div className={styles.info}>
         <div className={styles.restaurant}>{params.restaurant}</div>
-        <div className={styles.rating}>Rating: {params.rating}</div>
+        <div className={styles.rating}>
+          <Rate
+            disabled
+            count={params.rating}
+            value={params.rating}
+            allowHalf
+          />
+        </div>
         <div className={styles.summary}>{params.summary}</div>
         <div className={styles.userDetails}>
           <Image

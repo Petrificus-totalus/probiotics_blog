@@ -195,7 +195,7 @@ export default function Swallow() {
                   { required: true, message: "Please rate the restaurant!" },
                 ]}
               >
-                <Rate />
+                <Rate allowHalf />
               </Form.Item>
             </Col>
             <Col span={12}>

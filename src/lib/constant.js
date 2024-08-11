@@ -14,5 +14,5 @@ export const swallowMasonryCol = {
   default: 4,
   1430: 3,
   1090: 2,
-  750: 1,
+  750: 2,
 };

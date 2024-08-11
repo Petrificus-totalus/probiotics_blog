@@ -19,6 +19,8 @@
 .coverImage {
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 255, 200, 0.2);
+  width: 100%; /* Make cover image responsive */
+  height: auto; /* Maintain aspect ratio */
 }
 
 .info {
@@ -35,6 +37,9 @@
 .info .rating {
   color: #ffcc00;
   font-size: 1.1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 5px 0;
 }
 
@@ -59,4 +64,72 @@
 .avatar {
   border-radius: 50%;
   border: 2px solid #00ffcc;
+  width: 50px; /* Set a default width */
+  height: 50px; /* Set a default height */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .reviewCard {
+    max-width: 100%; /* Allow the card to use full width on small screens */
+    margin: 10px; /* Reduce margin for better fit */
+    padding: 15px; /* Adjust padding for smaller screens */
+  }
+
+  .info .restaurant {
+    font-size: 1.1em; /* Slightly reduce font size for smaller screens */
+  }
+
+  .info .rating {
+    font-size: 1em; /* Slightly reduce font size for smaller screens */
+  }
+
+  .info .summary {
+    font-size: 0.9em; /* Slightly reduce font size for smaller screens */
+  }
+
+  .userDetails {
+    flex-direction: column; /* Stack user details vertically on smaller screens */
+    gap: 5px; /* Reduce gap between items */
+  }
+
+  .username {
+    font-size: 1em; /* Slightly reduce font size for smaller screens */
+  }
+
+  .avatar {
+    width: 30px; /* Adjust width for smaller screens */
+    height: 30px; /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .reviewCard {
+    padding: 10px; /* Further reduce padding for very small screens */
+  }
+
+  .info .restaurant {
+    font-size: 1em; /* Further reduce font size for very small screens */
+  }
+
+  .info .rating {
+    font-size: 0.9em; /* Further reduce font size for very small screens */
+  }
+
+  .info .summary {
+    font-size: 0.8em; /* Further reduce font size for very small screens */
+  }
+
+  .userDetails {
+    gap: 3px; /* Further reduce gap for very small screens */
+  }
+
+  .username {
+    font-size: 0.9em; /* Further reduce font size for very small screens */
+  }
+
+  .avatar {
+    width: 20px; /* Further reduce width for very small screens */
+    height: 20px; /* Further reduce height for very small screens */
+  }
 }
