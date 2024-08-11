@@ -139,17 +139,22 @@ export default function Swallow() {
           </span>
         </div>
         <div className={styles.headercontent}>
-          {swallowers.map((item) => (
-            <div className={styles.rank} key={item.swallowID}>
-              <Image
-                src={item.avatar}
-                width={100}
-                height={100}
-                style={{ boxShadow: "1px 1px 2px black", borderRadius: "50%" }}
-              />
-              <span>{item.point}</span>
-            </div>
-          ))}
+          {swallowers
+            .sort((a, b) => b.point - a.point)
+            .map((item) => (
+              <div className={styles.rank} key={item.swallowID}>
+                <Image
+                  src={item.avatar}
+                  width={100}
+                  height={100}
+                  style={{
+                    boxShadow: "1px 1px 2px black",
+                    borderRadius: "50%",
+                  }}
+                />
+                <span>{item.point}</span>
+              </div>
+            ))}
         </div>
       </div>
       <div className={styles.content}>

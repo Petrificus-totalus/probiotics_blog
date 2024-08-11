@@ -2,17 +2,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 5px 10px 10px rgba(0, 255, 200, 0.3);
   padding: 20px;
   max-width: 300px;
   margin: 20px;
-  background-color: #fff;
+  background: linear-gradient(145deg, #1b1f2a, #2e3440);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reviewCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 255, 200, 0.4);
 }
 
 .coverImage {
   border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 255, 200, 0.2);
 }
 
 .info {
@@ -21,22 +27,36 @@
 }
 
 .info .restaurant {
-  font-size: 1.2em;
+  font-size: 1.3em;
   font-weight: bold;
+  color: #00ffcc;
 }
 
 .info .rating {
-  color: #ffbf00;
+  color: #ffcc00;
   font-size: 1.1em;
   margin: 5px 0;
 }
 
 .info .summary {
   font-style: italic;
-  color: #666;
+  color: #aaa;
+}
+
+.userDetails {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.username {
+  font-size: 1.1em;
+  color: #00ffcc;
 }
 
 .avatar {
   border-radius: 50%;
-  margin-top: 10px;
+  border: 2px solid #00ffcc;
 }

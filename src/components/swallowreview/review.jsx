@@ -16,15 +16,17 @@ export default function Review({ params }) {
         <div className={styles.restaurant}>{params.restaurant}</div>
         <div className={styles.rating}>Rating: {params.rating}</div>
         <div className={styles.summary}>{params.summary}</div>
-        <div className={styles.username}>{params.username}</div>
+        <div className={styles.userDetails}>
+          <Image
+            src={params.avatar}
+            width={40}
+            height={40}
+            className={styles.avatar}
+            alt="Avatar"
+          />
+          <div className={styles.username}>{params.username}</div>
+        </div>
       </div>
-      <Image
-        src={params.avatar}
-        width={60}
-        height={60}
-        className={styles.avatar}
-        alt="Avatar"
-      />
     </div>
   );
 }
