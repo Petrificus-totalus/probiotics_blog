@@ -3,9 +3,21 @@ import React from "react";
 import styles from "./review.module.css";
 import { Rate } from "antd";
 
-export default function Review({ params }) {
+export default function Review({ params, showDetail }) {
+  const handleClick = async () => {
+    const response = await fetch(
+      `/api/swallow/review/reviewPics?reviewID=${params.reviewID}`
+    );
+    const { data } = await response.json();
+    const item = {
+      ...params,
+      imgs: [params.coverimage, ...data.map((item) => item.link)],
+    };
+    showDetail(item);
+    // console.log(data);
+  };
   return (
-    <div className={styles.reviewCard}>
+    <div className={styles.reviewCard} onClick={() => handleClick()}>
       <Image
         src={`https://myblogprobiotics.s3.ap-southeast-2.amazonaws.com/${params.coverimage}`}
         width={140}

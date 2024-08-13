@@ -16,7 +16,9 @@ const CoolMenu = ({ menuData }) => {
         <div key={index} className={styles.menuItem}>
           <div
             className={styles.parentItem}
-            style={{ animationDelay: `${index * 0.4}s` }}
+            style={{
+              animationDelay: index === 0 ? 0 : `${0.5 + (index - 1) * 0.1}s`,
+            }}
           >
             {menu[0]}
           </div>
@@ -27,7 +29,7 @@ const CoolMenu = ({ menuData }) => {
                 className={styles.subMenuItem}
                 style={{
                   animationDelay: `${
-                    menuData.length * 0.3 + subIndex * 0.5 + index * 0.3
+                    menuData.length * 0.2 + subIndex * 0.5 + index * 0.3
                   }s`,
                 }}
                 onClick={() => handleNavigation(`/${subItem.toLowerCase()}`)}

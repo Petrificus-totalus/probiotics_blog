@@ -28,13 +28,13 @@
 }
 
 .menuContainer .menuItem:first-child .parentItem {
-  animation: revealText 0.4s ease-in forwards; /* 应用动画 */
+  animation: revealText 0.5s ease-in forwards; /* 应用动画 */
 }
 .menuContainer .menuItem:nth-child(2) .parentItem {
-  animation: revealText 0.2s linear forwards; /* 应用动画 */
+  animation: revealText 0.1s linear forwards; /* 应用动画 */
 }
 .menuContainer .menuItem:nth-child(3) .parentItem {
-  animation: revealText 0.1s linear forwards; /* 应用动画 */
+  animation: revealText 0.05s linear forwards; /* 应用动画 */
 }
 
 @keyframes revealText {

@@ -1,6 +1,16 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Modal, Form, Input, Button, Upload, Rate, Row, Col } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Button,
+  Upload,
+  Rate,
+  Row,
+  Col,
+  Carousel,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Masonry from "react-masonry-css";
 
@@ -21,6 +31,8 @@ export default function Swallow() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [lastScrollTop, setLastScrollTop] = useState(0); // 记录上次滚动的位置
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [currentReview, setCurrentReview] = useState({ imgs: [] });
 
   useEffect(() => {
     const getAvatars = async () => {
@@ -128,6 +140,11 @@ export default function Swallow() {
     };
   }, [onScroll]);
 
+  const handleDetail = (item) => {
+    setIsDetailModalOpen(true);
+    setCurrentReview(item);
+    console.log(item);
+  };
   return (
     <div className={styles.container} ref={contentRef}>
       <div className={styles.header}>
@@ -165,7 +182,7 @@ export default function Swallow() {
         >
           {reviews.map((item) => (
             <div key={item.reviewID}>
-              <Review params={item} />
+              <Review params={item} showDetail={handleDetail} />
             </div>
           ))}
         </Masonry>
@@ -243,6 +260,40 @@ export default function Swallow() {
             </Button>
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        open={isDetailModalOpen}
+        onOk={() => {
+          setIsDetailModalOpen(false);
+        }}
+        onCancel={() => setIsDetailModalOpen(false)}
+        footer={[
+          <Button key="back" onClick={() => setIsDetailModalOpen(false)}>
+            Close
+          </Button>,
+        ]}
+      >
+        {currentReview && (
+          <Carousel arrows dots={false} infinite={false}>
+            {currentReview.imgs.map((item) => (
+              <Image
+                key={item}
+                alt="review"
+                width={300}
+                height={300}
+                src={`https://myblogprobiotics.s3.ap-southeast-2.amazonaws.com/${item}`}
+              ></Image>
+            ))}
+          </Carousel>
+        )}
+
+        <div>{currentReview.restaurant}</div>
+        <div>{currentReview.rating}</div>
+        <div>{currentReview.summary}</div>
+        <div>{currentReview.username}</div>
+        <Image src={currentReview.avatar} width={50} height={50}></Image>
+        <div>{currentReview.review}</div>
       </Modal>
     </div>
   );
