@@ -1,12 +1,17 @@
-"use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import CoolMenu from "@/components/coolMenu/coolmenu";
+import "./globals.css";
+
+const menuData = [
+  ["Account", "Spend", "Chart"],
+  ["Learn", "Algorithm", "h5c3", "Network", "React"],
+  ["Food", "Restaurant", "Swallow"],
+];
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/spend?page=1");
-  }, [router]);
-
-  return null;
+  return (
+    <div className="root-container">
+      <div className="menu">
+        <CoolMenu menuData={menuData} />
+      </div>
+    </div>
+  );
 }

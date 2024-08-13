@@ -17,6 +17,7 @@ export default function Review({ params }) {
         <div className={styles.restaurant}>{params.restaurant}</div>
         <div className={styles.rating}>
           <Rate
+            className={styles.rate}
             disabled
             count={params.rating}
             value={params.rating}

@@ -75,13 +75,15 @@
     margin: 10px; /* Reduce margin for better fit */
     padding: 15px; /* Adjust padding for smaller screens */
   }
-
+  .info {
+    margin-top: 3px;
+  }
   .info .restaurant {
-    font-size: 1.1em; /* Slightly reduce font size for smaller screens */
+    font-size: 0.8em; /* Slightly reduce font size for smaller screens */
   }
 
-  .info .rating {
-    font-size: 1em; /* Slightly reduce font size for smaller screens */
+  .info .rate {
+    font-size: 0.5em; /* Slightly reduce font size for smaller screens */
   }
 
   .info .summary {
@@ -89,7 +91,6 @@
   }
 
   .userDetails {
-    flex-direction: column; /* Stack user details vertically on smaller screens */
     gap: 5px; /* Reduce gap between items */
   }
 
@@ -107,13 +108,15 @@
   .reviewCard {
     padding: 10px; /* Further reduce padding for very small screens */
   }
-
+  .info {
+    margin-top: 3px;
+  }
   .info .restaurant {
-    font-size: 1em; /* Further reduce font size for very small screens */
+    font-size: 0.6em; /* Further reduce font size for very small screens */
   }
 
-  .info .rating {
-    font-size: 0.9em; /* Further reduce font size for very small screens */
+  .info .rate {
+    font-size: 0.5em; /* Further reduce font size for very small screens */
   }
 
   .info .summary {
@@ -125,7 +128,7 @@
   }
 
   .username {
-    font-size: 0.9em; /* Further reduce font size for very small screens */
+    font-size: 0.8em; /* Further reduce font size for very small screens */
   }
 
   .avatar {

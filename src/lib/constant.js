@@ -11,8 +11,8 @@ export const masonryCol = {
   750: 1,
 };
 export const swallowMasonryCol = {
-  default: 4,
-  1430: 3,
-  1090: 2,
+  default: 5,
+  1430: 4,
+  1090: 3,
   750: 2,
 };

@@ -1,0 +1,86 @@
+.menuContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  overflow-x: auto;
+  width: 55%;
+  padding: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #006d77 transparent;
+  border-radius: 10px;
+}
+
+.menuItem {
+  margin-right: 30px;
+  opacity: 1;
+}
+
+.parentItem {
+  position: relative;
+  white-space: nowrap; /* 防止文本换行 */
+  background-color: #006d77; /* 背景颜色 */
+  text-align: center;
+  color: #ffffff; /* 字体颜色 */
+  padding: 10px;
+  font-size: 2.5rem;
+  border-radius: 5px;
+  overflow: hidden;
+  clip-path: inset(0 0 0 100%); /* 初始状态：只显示左侧0%的内容 */
+}
+
+.menuContainer .menuItem:first-child .parentItem {
+  animation: revealText 0.4s ease-in forwards; /* 应用动画 */
+}
+.menuContainer .menuItem:nth-child(2) .parentItem {
+  animation: revealText 0.2s linear forwards; /* 应用动画 */
+}
+.menuContainer .menuItem:nth-child(3) .parentItem {
+  animation: revealText 0.1s linear forwards; /* 应用动画 */
+}
+
+@keyframes revealText {
+  0% {
+    clip-path: inset(0 0 0 100%); /* 从右边完全遮挡 */
+  }
+  100% {
+    clip-path: inset(0 0 0 0); /* 最终状态：右侧完全显示 */
+  }
+}
+
+.subMenu {
+  margin-top: 20px;
+}
+
+.subMenuItem {
+  background: #83c5be;
+  padding: 5px 15px;
+  border-radius: 5px;
+  margin-top: 15px;
+  font-size: 2rem;
+  text-align: center;
+  color: #006d77;
+  animation: fadeInSubItem 0.5s ease-out forwards;
+  opacity: 0;
+  transform: translateX(30%);
+  box-shadow: 0 0 5px rgba(0, 109, 119, 0.5);
+  cursor: pointer;
+}
+
+@keyframes fadeInSubItem {
+  0% {
+    opacity: 0;
+    transform: translateX(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.menuContainer::-webkit-scrollbar {
+  height: 8px;
+}
+
+.menuContainer::-webkit-scrollbar-thumb {
+  background: #006d77;
+  border-radius: 4px;
+}
