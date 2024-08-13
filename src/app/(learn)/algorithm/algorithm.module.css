@@ -1,6 +1,9 @@
 .container {
   overflow: auto;
   height: 100vh;
+  background-image: url("/iron-vmake.jpg");
+  background-size: cover;
+  background-position: center;
 }
 .header {
   display: flex;

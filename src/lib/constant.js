@@ -1,7 +1,7 @@
 export const tagColor = {
-  easy: "#d6f5a6",
-  medium: "#f9e7c1",
-  hard: "#feaba5",
+  easy: "rgba(209, 243, 162, 0.6)",
+  medium: "rgba(247, 226, 189,0.65)",
+  hard: "rgba(252, 157, 158,0.6)",
 };
 
 export const masonryCol = {
