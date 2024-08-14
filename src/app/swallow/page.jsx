@@ -264,36 +264,51 @@ export default function Swallow() {
 
       <Modal
         open={isDetailModalOpen}
-        onOk={() => {
-          setIsDetailModalOpen(false);
-        }}
         onCancel={() => setIsDetailModalOpen(false)}
-        footer={[
-          <Button key="back" onClick={() => setIsDetailModalOpen(false)}>
-            Close
-          </Button>,
-        ]}
+        className={styles.modal}
+        footer={null}
       >
+        <div className={styles.userInfo}>
+          <Image
+            src={currentReview.avatar}
+            width={50}
+            height={50}
+            className={styles.avatar}
+          />
+          <div className={styles.username}>{currentReview.username}</div>
+          <div className={styles.summary}>{currentReview.summary}</div>
+        </div>
         {currentReview && (
-          <Carousel arrows dots={false} infinite={false}>
+          <Carousel
+            arrows
+            dots={false}
+            infinite={false}
+            className={styles.carousel}
+          >
             {currentReview.imgs.map((item) => (
               <Image
                 key={item}
                 alt="review"
-                width={300}
-                height={300}
+                width={200}
+                height={180}
                 src={`https://myblogprobiotics.s3.ap-southeast-2.amazonaws.com/${item}`}
-              ></Image>
+                className={styles.carouselImage}
+              />
             ))}
           </Carousel>
         )}
 
-        <div>{currentReview.restaurant}</div>
-        <div>{currentReview.rating}</div>
-        <div>{currentReview.summary}</div>
-        <div>{currentReview.username}</div>
-        <Image src={currentReview.avatar} width={50} height={50}></Image>
-        <div>{currentReview.review}</div>
+        <div className={styles.detailcontent}>
+          <div className={styles.detailheader}>
+            <h2 className={styles.restaurant}>{currentReview.restaurant}</h2>
+            <div className={styles.ratingContainer}>
+              <div className={styles.ratingNumber}>{currentReview.rating}</div>
+              <div className={styles.ratingCircle}></div>
+            </div>
+          </div>
+
+          <div className={styles.review}>{currentReview.review}</div>
+        </div>
       </Modal>
     </div>
   );

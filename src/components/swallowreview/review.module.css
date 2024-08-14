@@ -46,6 +46,7 @@
 .info .summary {
   font-style: italic;
   color: #aaa;
+  word-break: break-word; /* 允许换行 */
 }
 
 .userDetails {
