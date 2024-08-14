@@ -40,13 +40,13 @@
 }
 
 .menuContainer .menuItem:first-child .parentItem {
-  animation: revealText 0.5s ease-in forwards; /* 应用动画 */
+  animation: revealText 0.6s cubic-bezier(0.98, 0, 0.81, 1) forwards;
 }
 .menuContainer .menuItem:nth-child(2) .parentItem {
-  animation: revealText 0.1s linear forwards; /* 应用动画 */
+  animation: revealText 0.1s linear forwards;
 }
 .menuContainer .menuItem:nth-child(3) .parentItem {
-  animation: revealText 0.05s linear forwards; /* 应用动画 */
+  animation: revealText 0.05s linear forwards;
 }
 
 @keyframes revealText {
@@ -59,7 +59,7 @@
 }
 
 .subMenu {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .subMenuItem {
