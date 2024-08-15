@@ -7,19 +7,18 @@
   scrollbar-width: thin;
   scrollbar-color: #006d77 transparent;
   border-radius: 20px;
-  padding: 40px;
+  padding: 40px 20px;
 
   background: linear-gradient(
     to right,
     rgba(46, 107, 117, 0.5),
     rgba(169, 5, 38, 0.7)
-  ); /* 渐变背景 */
-  /* border: 2px solid rgba(255, 255, 255, 0.3);  */
+  );
   box-shadow: 0 0 45px rgba(30, 29, 29, 0.9);
 }
 
 .menuItem {
-  margin-right: 30px;
+  margin-right: 20px;
   opacity: 1;
   flex: 1;
 }
@@ -29,18 +28,18 @@
   white-space: nowrap; /* 防止文本换行 */
   background: inherit; /* 继承父容器的背景 */
 
-  /* background-color: rgba(46, 107, 117, 0.9); */
   text-align: center;
-  color: rgba(255, 255, 255, 0.9); /* 柔和的白色，透明度略高 */
+  color: rgba(255, 255, 255, 0.9);
   padding: 10px;
-  font-size: 2.5rem;
+  font-size: 2rem;
   border-bottom: 1px solid #fff;
   overflow: hidden;
   clip-path: inset(0 0 0 100%); /* 初始状态：只显示左侧0%的内容 */
 }
 
+/* https://cubic-bezier.com/#.98,0,.87,.11 */
 .menuContainer .menuItem:first-child .parentItem {
-  animation: revealText 0.6s cubic-bezier(0.98, 0, 0.81, 1) forwards;
+  animation: revealText 0.5s cubic-bezier(0.98, 0, 0.81, 0.11) forwards;
 }
 .menuContainer .menuItem:nth-child(2) .parentItem {
   animation: revealText 0.1s linear forwards;
@@ -63,27 +62,25 @@
 }
 
 .subMenuItem {
-  /* background: rgba(146, 195, 190, 0.6); */
   background: inherit; /* 继承父容器的背景 */
 
   padding: 5px 15px;
   border-radius: 5px;
   margin-top: 15px;
-  font-size: 2rem;
+  font-size: 1.6rem;
   text-align: center;
   color: rgba(255, 255, 255, 0.65); /* 柔和的白色，透明度略高 */
   animation: fadeInSubItem 0.5s ease-out forwards;
   opacity: 0;
-  /* transform: translateX(30%); */
   box-shadow: 5px 5px 10px rgba(0, 109, 119, 0.5);
   cursor: pointer;
   transition: color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* 添加过渡效果 */
 }
 
 .subMenuItem:hover {
-  transform: translateY(-5px) scale(1.05); /* 放大并向上移动 */
-  box-shadow: 8px 8px 15px rgba(0, 109, 119, 0.7); /* 增加阴影 */
-  color: rgba(255, 255, 255, 1); /* 悬停时文字颜色变亮 */
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 8px 8px 15px rgba(0, 109, 119, 0.7);
+  color: rgba(255, 255, 255, 1); /* brighter text */
 }
 
 @keyframes fadeInSubItem {

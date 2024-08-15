@@ -64,9 +64,6 @@ export default function Spend() {
     setCurrentRecord(record);
     setIsModalVisible(true);
   };
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -134,16 +131,7 @@ export default function Spend() {
           ))}
         </Spin>
       </div>
-      <Modal
-        open={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[
-          <Button key="back" onClick={handleCancel}>
-            Close
-          </Button>,
-        ]}
-      >
+      <Modal open={isModalVisible} onCancel={handleCancel} footer={null}>
         {currentRecord.links?.length > 0 && (
           <Carousel arrows dots={false} infinite={false}>
             {currentRecord.links.map((item) => (
