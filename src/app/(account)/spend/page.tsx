@@ -6,38 +6,59 @@ import moment from "moment";
 import { Card, Tag, Space, Table, Button, Modal, Carousel, Spin } from "antd";
 import AddTag from "@/components/addTransactionTag/addTag";
 
+interface TransactionItem {
+  title: string;
+  location: string;
+  price: string;
+  tags: string[];
+  description: string;
+  links: string[];
+}
+
+interface TransactionGroup {
+  date: string;
+  total: number;
+  transactions: TransactionItem[];
+}
+
 export default function Spend() {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState<TransactionGroup[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [spin, setSpin] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentRecord, setCurrentRecord] = useState({});
+  const [currentRecord, setCurrentRecord] = useState<TransactionItem>({
+    title: "",
+    location: "",
+    price: "",
+    tags: [],
+    description: "",
+    links: [],
+  });
+
   const columns = [
     {
       title: "Title",
       dataIndex: "title",
       key: "title",
-      render: (text) => <span>{text}</span>,
+      render: (text: string) => <span>{text}</span>,
     },
     {
       title: "Location",
       dataIndex: "location",
       key: "location",
     },
-
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      render: (text) => <span>{parseFloat(text).toFixed(2)}</span>,
+      render: (text: string) => <span>{parseFloat(text).toFixed(2)}</span>,
     },
-
     {
       title: "Tags",
       key: "tags",
       dataIndex: "tags",
-      render: (tags) => (
+      render: (tags: string[]) => (
         <>
           {tags.map((tag) => (
             <Tag color="blue" key={tag}>
@@ -50,7 +71,7 @@ export default function Spend() {
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
+      render: (_: any, record: TransactionItem) => (
         <Space size="middle">
           {(record.description || record.links?.length > 0) && (
             <Button onClick={() => showModal(record)}>View Details</Button>
@@ -60,7 +81,7 @@ export default function Spend() {
     },
   ];
 
-  const showModal = (record) => {
+  const showModal = (record: TransactionItem) => {
     setCurrentRecord(record);
     setIsModalVisible(true);
   };
@@ -69,15 +90,15 @@ export default function Spend() {
     setIsModalVisible(false);
   };
 
-  const getTransactions = async () => {
+  const getTransactions = async (page: number) => {
     setSpin(true);
-    const response = await fetch(`/api/spend?page=${currentPage}`);
+    const response = await fetch(`/api/spend?page=${page}`);
     const { data, totalPages } = await response.json();
     setTransactions(data);
-    // console.log(data);
     setTotalPages(totalPages);
     setSpin(false);
   };
+
   useEffect(() => {
     getTransactions(currentPage);
   }, [currentPage]);
@@ -94,7 +115,7 @@ export default function Spend() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.buttons}>
-          <CreateSpend finish={getTransactions} />
+          <CreateSpend finish={() => getTransactions(currentPage)} />
           <AddTag />
         </div>
 
@@ -124,6 +145,7 @@ export default function Spend() {
               <Table
                 columns={columns}
                 dataSource={transactions}
+                rowKey={(record) => record.title + record.location}
                 showHeader={false}
                 pagination={false}
               />
@@ -132,18 +154,18 @@ export default function Spend() {
         </Spin>
       </div>
       <Modal open={isModalVisible} onCancel={handleCancel} footer={null}>
-        {currentRecord.links?.length > 0 && (
+        {currentRecord?.links?.length > 0 && (
           <Carousel arrows dots={false} infinite={false}>
             {currentRecord.links.map((item) => (
               <img
                 key={item}
                 alt="transaction"
                 src={`https://myblogprobiotics.s3.ap-southeast-2.amazonaws.com/${item}`}
-              ></img>
+              />
             ))}
           </Carousel>
         )}
-        {currentRecord.description && <p>{currentRecord.description}</p>}
+        {currentRecord?.description && <p>{currentRecord.description}</p>}
       </Modal>
     </div>
   );

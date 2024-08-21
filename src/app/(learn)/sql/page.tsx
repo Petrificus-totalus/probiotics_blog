@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Item from "@/components/learnItem/reactitem";
-import styles from "./react.module.css";
+import Item from "@/components/learnItem/sqlitem";
+import styles from "./sql.module.css";
 
-export default function ReactPage() {
+export default function SQLPage() {
   const [items, setItems] = useState([]);
   useEffect(() => {
     const getItems = async () => {
-      const response = await fetch("/api/react");
+      const response = await fetch("/api/sql");
       const { data } = await response.json();
       setItems(data);
     };
@@ -17,7 +17,7 @@ export default function ReactPage() {
   return (
     <div className={styles.container}>
       {items.map((item) => (
-        <Item item={item} key={item["reactID"]} />
+        <Item item={item} key={item["sqlID"]} />
       ))}
     </div>
   );

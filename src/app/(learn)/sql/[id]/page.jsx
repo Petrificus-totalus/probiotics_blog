@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import styles from "./content.module.css";
 
-export default function ReactDetail({ params }) {
+export default function SQLDetail({ params }) {
   const [content, setContent] = useState("");
   const router = useRouter();
   useEffect(() => {
     const getContent = async () => {
-      const response = await fetch(`/api/react/content?id=${params.id}`);
+      const response = await fetch(`/api/sql/content?id=${params.id}`);
       const { data } = await response.json();
       setContent(data[0].content);
     };
@@ -31,12 +31,12 @@ export default function ReactDetail({ params }) {
             },
             h1: {
               component: ({ children }) => (
-                <h1 style={{ margin: "20px 0" }}>{children}</h1>
+                <h1 style={{ margin: "20px 0 5px 0" }}>{children}</h1>
               ),
             },
             h2: {
               component: ({ children }) => (
-                <h2 style={{ margin: "10px 0" }}>{children}</h2>
+                <h2 style={{ margin: "10px 0 5px 0" }}>{children}</h2>
               ),
             },
             li: {
@@ -44,6 +44,20 @@ export default function ReactDetail({ params }) {
                 <li style={{ marginLeft: "20px", marginBottom: "5px" }}>
                   {children}
                 </li>
+              ),
+            },
+            highlight: {
+              component: ({ children }) => (
+                <strong
+                  style={{
+                    color: "#d9702b",
+                    margin: "0 5px",
+                    padding: "2px",
+                    backgroundColor: "#f8f8f8",
+                  }}
+                >
+                  {children}
+                </strong>
               ),
             },
           },

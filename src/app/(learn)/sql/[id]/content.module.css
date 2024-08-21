@@ -1,0 +1,15 @@
+.container {
+  background-image: url("/op.jpg");
+  background-size: cover;
+  background-position: center;
+  padding: 10px 50px;
+  height: 100vh;
+}
+.back {
+  /* margin-bottom: 10px; */
+}
+
+.markdown {
+  padding: 0 10px;
+  background-color: rgba(255, 255, 255, 0.85);
+}

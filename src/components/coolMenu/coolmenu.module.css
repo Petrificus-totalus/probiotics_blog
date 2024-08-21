@@ -4,10 +4,10 @@
   overflow-x: auto;
   width: 55%;
   padding: 10px;
-  scrollbar-width: thin;
-  scrollbar-color: #006d77 transparent;
+  /* scrollbar-width: thin;
+  scrollbar-color: #006d77 transparent; */
   border-radius: 20px;
-  padding: 40px 20px;
+  padding: 30px 20px;
 
   background: linear-gradient(
     to right,
@@ -59,6 +59,17 @@
 
 .subMenu {
   margin-top: 30px;
+  height: 35vh;
+  overflow-y: overlay;
+  padding-right: 25px;
+}
+/* .subMenu {
+  scrollbar-width: none; 
+} */
+.subMenu::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none; /* Safari and Chrome */
 }
 
 .subMenuItem {
@@ -68,6 +79,7 @@
   border-radius: 5px;
   margin-top: 15px;
   font-size: 1.6rem;
+
   text-align: center;
   color: rgba(255, 255, 255, 0.65); /* 柔和的白色，透明度略高 */
   animation: fadeInSubItem 0.5s ease-out forwards;
@@ -83,6 +95,9 @@
   color: rgba(255, 255, 255, 1); /* brighter text */
 }
 
+.subMenuItem:last-child {
+  margin-bottom: 25px;
+}
 @keyframes fadeInSubItem {
   0% {
     opacity: 0;
