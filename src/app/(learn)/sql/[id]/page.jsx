@@ -60,6 +60,82 @@ export default function SQLDetail({ params }) {
                 </strong>
               ),
             },
+            table: {
+              component: ({ children }) => (
+                <table
+                  style={{
+                    borderCollapse: "collapse",
+                    border: "1px solid #ddd",
+                    marginTop: "10px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  {children}
+                </table>
+              ),
+            },
+            thead: {
+              component: ({ children }) => (
+                <thead
+                  style={{
+                    backgroundColor: "#f4f4f4",
+                  }}
+                >
+                  {children}
+                </thead>
+              ),
+            },
+            tbody: {
+              component: ({ children }) => (
+                <tbody
+                  style={{
+                    backgroundColor: "#ffffff",
+                  }}
+                >
+                  {children}
+                </tbody>
+              ),
+            },
+            tr: {
+              component: ({ children }) => (
+                <tr
+                  style={{
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  {children}
+                </tr>
+              ),
+            },
+            th: {
+              component: ({ children }) => (
+                <th
+                  style={{
+                    padding: "10px",
+                    textAlign: "left",
+                    fontWeight: "bold",
+                    borderRight: "1px solid #ddd",
+                    borderBottom: "2px solid #ddd",
+                  }}
+                >
+                  {children}
+                </th>
+              ),
+            },
+            td: {
+              component: ({ children }) => (
+                <td
+                  style={{
+                    padding: "10px",
+                    textAlign: "left",
+                    borderRight: "1px solid #ddd",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  {children}
+                </td>
+              ),
+            },
           },
         }}
       >
