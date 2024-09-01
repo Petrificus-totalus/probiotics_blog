@@ -16,6 +16,11 @@
   );
   box-shadow: 0 0 45px rgba(30, 29, 29, 0.9);
 }
+@media (max-width: 768px) {
+  .menuContainer {
+    width: 100%;
+  }
+}
 
 .menuItem {
   margin-right: 20px;

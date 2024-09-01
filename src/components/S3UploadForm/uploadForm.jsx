@@ -31,7 +31,31 @@ const UploadForm = ({ setFiles, setUploading }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="file" id="file" name="file" accept="images/*" multiple />
+      <label
+        htmlFor="file"
+        style={{
+          display: "inline-block",
+          padding: "4px 6px",
+          backgroundColor: "#007bff",
+          color: "#fff",
+          borderRadius: "5px",
+          cursor: "pointer",
+          fontSize: "12px",
+          textAlign: "center",
+          marginBottom: "10px",
+          marginRight: "30px",
+        }}
+      >
+        Select Files
+      </label>
+      <input
+        type="file"
+        id="file"
+        name="file"
+        accept="images/*"
+        multiple
+        style={{ display: "none" }}
+      />
       <SubmitButton pending={pending} />
     </form>
   );
