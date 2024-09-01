@@ -10,7 +10,7 @@ export const POST = async (request) => {
     const req = await request.formData();
 
     req.append("folder", "swallow/item");
-    console.log(req);
+    console.log("reviewADD" + req);
     const result = await uploadFile(req);
     const files = JSON.parse(result["data"]);
     const { restaurantName, rating, reviewerName, summary, review } =
