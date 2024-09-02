@@ -1,0 +1,17 @@
+.container {
+  padding: 10px 50px;
+}
+.back {
+  margin-bottom: 40px;
+}
+
+.markdown {
+  padding: 10px;
+  background-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px 0;
+  }
+}

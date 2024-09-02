@@ -3,7 +3,7 @@ import "./globals.css";
 
 const menuData = [
   ["Account", "Spend", "Chart"],
-  ["Learn", "Algorithm", "h5c3", "Network", "React", "SQL", "Docker", "git"],
+  ["Learn", "Algorithm", "h5c3", "Java", "React", "SQL", "Docker", "git"],
   ["Fun", "Jokes", "Swallow"],
 ];
 export default function Home() {

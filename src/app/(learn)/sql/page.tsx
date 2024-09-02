@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Item from "@/components/learnItem/sqlitem";
+import Item from "@/components/learnItem/item";
 import styles from "./sql.module.css";
 
 export default function SQLPage() {
@@ -17,7 +17,7 @@ export default function SQLPage() {
   return (
     <div className={styles.container}>
       {items.map((item) => (
-        <Item item={item} key={item["sqlID"]} />
+        <Item item={item} branch={"sql"} key={item["sqlID"]} />
       ))}
     </div>
   );
