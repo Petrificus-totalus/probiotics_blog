@@ -34,6 +34,18 @@ const markdownOptions = {
         </strong>
       ),
     },
+    img: {
+      component: ({ src, alt }) => (
+        <img
+          src={src}
+          alt={alt}
+          style={{
+            maxWidth: "40%",
+            height: "auto",
+          }}
+        />
+      ),
+    },
     table: {
       component: ({ children }) => (
         <table
